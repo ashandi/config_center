@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Config Center
+  description: Config Center
+  version: 1.0.0
+tags:
+  - name: Config
+    description: Config
+paths:
+  /config:
+    get:
+      tags:
+        - Config
+      summary: Getting config
+      parameters:
+        - in: query
+          name: appVersion
+          required: true
+          schema:
+            type: string
+          example: '13.6.956'
+        - in: query
+          name: platform
+          required: true
+          schema:
+            type: string
+            enum: ['android', 'ios']
+        - in: query
+          name: assetsVersion
+          required: false
+          schema:
+            type: string
+          example: '12.9.1'
+        - in: query
+          name: definitionsVersion
+          required: false
+          schema:
+            type: string
+          example: '12.9.1'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+
+components:
+  schemas:
+    ConfigResponse:
+      type: object
+      properties:
+        version:
+          type: object
+          properties:
+            required:
+              type: string
+              example: '12.2.423'
+            store:
+              type: string
+              example: '13.7.556'
+        backend_entry_point:
+          $ref: '#/components/schemas/JsonRpcService'
+        assets:
+          $ref: '#/components/schemas/Dependency'
+        definitions:
+          $ref: '#/components/schemas/Dependency'
+        notifications:
+          $ref: '#/components/schemas/JsonRpcService'
+    JsonRpcService:
+      type: object
+      properties:
+        jsonrpc_url:
+          type: string
+          example: 'api.application.com/jsonrpc/v2'
+    Dependency:
+      type: object
+      properties:
+        version:
+          type: string
+          example: '13.5.275'
+        hash:
+          type: string
+          example: '0b313712189f60d9f46d36577140fb58beaec610353850f050cb8975f56ae381'
+        urls:
+          type: array
+          items:
+            type: string
+            example: 'vqe.cdn.application.com'
